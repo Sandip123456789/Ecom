@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Scene1</title>
+        <script src="https://cdn.babylonjs.com/viewer/babylon.viewer.js"></script>
+        <script src="https://cdn.babylonjs.com/babylon.js"></script>
+        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+        <style>
+            *{
+                padding:0px;
+                margin: 0px;
+                box-sizing: border-box;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+
+    <body>
+        <canvas id="renderCanvas" touch-action="none" style="height: 100vh; width:100%;"></canvas>
+        <!-- <babylon model="./scene1.babylon"></babylon> -->
+    </body>
+    <script>
+
+        const canvas = document.getElementById("renderCanvas");
+        const engine = new BABYLON.Engine(canvas, true);
+
+        const scene = new BABYLON.Scene(engine);
+        const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 1.3, new BABYLON.Vector3(0, 0, 0), scene);
+        camera.attachControl(canvas, true);
+        scene.clearColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1,1, 1), scene);
+        //const box = BABYLON.MeshBuilder.CreateBox("box", {}, scene);
+
+        //BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "Speakers_Sytem_TB"); //empty string all meshes
+        //BABYLON.SceneLoader.ImportMeshAsync("model1", "/relative path/", "myFile"); //Name of model for one model
+        //BABYLON.SceneLoader.ImportMeshAsync(["model1", "model2"], "/relative path/", "myFile"); //Array of model names
+
+        //BABYLON.SceneLoader.ImportMeshAsync("detached_house", "https://assets.babylonjs.com/meshes/", "both_houses_scene.babylon").then((result) => {
+        //        const house1 = scene.getMeshByName("detached_house");
+        //        house1.position.y = 2;
+        //        const house2 = result.meshes[2];
+        //        house2.position.y = 1;
+        //    });
+
+        BABYLON.SceneLoader.ImportMeshAsync("", "https://assets.babylonjs.com/meshes/", "shoe_variants.glb", scene, function (scene) {
+            });
+
+        //var music3 = new BABYLON.Sound("", "sound1.mp3", scene,
+        //        null, { loop: true, autoplay: true, spatialSound: true, maxDistance: 100 });
+        //music3.setPosition(new BABYLON.Vector3(0, 0, 0));
+        engine.runRenderLoop(function () {
+                scene.render();
+            });
+
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+
+    </script>
+
+</html>

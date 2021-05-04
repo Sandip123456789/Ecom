@@ -1,115 +1,228 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ecom</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1"
+    />
 
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
 
     <script type="text/javascript">
-        var user = '{{request.user}}'
+      var user = '{{request.user}}';
 
-        function getToken(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
+      function getToken(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === name + '=') {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
             }
-            return cookieValue;
+          }
         }
-        const csrftoken = getToken('csrftoken');
+        return cookieValue;
+      }
+      const csrftoken = getToken('csrftoken');
 
-        function getCookie(name) {
-            // split cookie string and get all individual name=value in an array
-            var cookieArr = document.cookie.split(";");
+      function getCookie(name) {
+        // split cookie string and get all individual name=value in an array
+        var cookieArr = document.cookie.split(';');
 
-            // loop through the array elements
-            for (var i = 0; i < cookieArr.length; i++) {
-                var cookiePair = cookieArr[i].split("=");
+        // loop through the array elements
+        for (var i = 0; i < cookieArr.length; i++) {
+          var cookiePair = cookieArr[i].split('=');
 
-                /* Removing whitespace at the begining of the cookie name
+          /* Removing whitespace at the begining of the cookie name
                 and compare it with given string */
-                if (name == cookiePair[0].trim()) {
-                    // Decode the cookie value and return
-                    return decodeURIComponent(cookiePair[1]);
-                }
-            }
-
-            // Return null if not found
-            return null;
+          if (name == cookiePair[0].trim()) {
+            // Decode the cookie value and return
+            return decodeURIComponent(cookiePair[1]);
+          }
         }
-        var cart = JSON.parse(getCookie('cart'))
 
-        if (cart == undefined) {
-            cart = {}
-            console.log('Cart created!', cart)
-            document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
-        }
-        console.log('Cart:', cart)
+        // Return null if not found
+        return null;
+      }
+      var cart = JSON.parse(getCookie('cart'));
+
+      if (cart == undefined) {
+        cart = {};
+        console.log('Cart created!', cart);
+        document.cookie = 'cart=' + JSON.stringify(cart) + ';domain=;path=/';
+      }
+      console.log('Cart:', cart);
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="{% url 'store'%}">Ecom</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+      <a class="navbar-brand" href="{% url 'store'%}">Ecom</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'store'%}">Home <span class="sr-only">(current)</span></a>
-                </li>
-
-            </ul>
-            <div class="form-inline my-2 my-lg-0">
-                <a href="#" class="btn btn-warning">Login</a>
-
-                <a href="{% url 'cart' %}">
-                    <img id="cart-icon" src="{% static 'images/cart.png' %}">
-                </a>
-                <p id="cart-total">{{cartItems}}</p>
-
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'store'%}"
+              >Home <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <!-- <li class="nav-item active">
+            <a class="nav-link" href="#">Features</a>
+          </li> -->
+          <li class="nav-item active dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Categories
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Electronic Devices</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Men's Fashion</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Women's Fashion</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Watches & Accessories</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Sports & Outdoor</a>
+              <div class="dropdown-divider"></div>
             </div>
-        </div>
-    </nav>
+          </li>
+          <input
+            class="form-control sm-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <button class="btn btn-dark my-2 my-sm-0" type="submit">
+            <i class="fa fa-search"></i>
+          </button>
+        </ul>
+        <div class="form-inline my-2 my-lg-0">
+          <a href="#" class="btn btn-warning">Login</a>
 
+          <a href="{% url 'cart' %}">
+            <img id="cart-icon" src="{% static 'images/cart.png' %}" />
+          </a>
+          <p id="cart-total">{{cartItems}}</p>
+        </div>
+      </div>
+    </nav>
+    <canvas id="try"></canvas>
     <div class="container">
-        <br>
-        {% block content %}{% endblock content%}
+      <br />
+      {% block content %}{% endblock content%}
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
-    </script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"
+    ></script>
 
-    <script type="text/javascript" src="{% static 'js/cart.js' %}">
+    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
 
-    </script>
+    <!-- <script>
+      var createScene = function () {
+        // Creates a basic Babylon Scene object (non-mesh)
+        var scene = new BABYLON.Scene(engine);
 
-</body>
+        // Create a camera
+        var camera = new BABYLON.ArcRotateCamera(
+          'camera',
+          2.372,
+          1,
+          0.5,
+          BABYLON.Vector3.Zero(),
+          scene
+        );
+        camera.upperRadiusLimit = 0.5;
+        camera.lowerRadiusLimit = 0.25;
+        camera.minZ = 0.01;
 
+        // Attaches the camera to the canvas
+        camera.attachControl(canvas, true);
+
+        // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+        var light = new BABYLON.HemisphericLight(
+          'light',
+          new BABYLON.Vector3(0, 1, 0),
+          scene
+        );
+
+        // Use asset Manager to load the asset
+        var assetsManager = new BABYLON.AssetsManager(scene);
+        var meshTask = assetsManager.addMeshTask(
+          'shoe task',
+          '',
+          'https://assets.babylonjs.com/meshes/',
+          'shoe_variants.glb'
+        );
+
+        meshTask.onSuccess = function (task) {
+          task.loadedMeshes[0].position = BABYLON.Vector3.Zero();
+          scene.debugLayer.show({ embedMode: true });
+          scene.debugLayer.select(task.loadedMeshes[0], 'VARIANTS');
+        };
+
+        assetsManager.onFinish = function (tasks) {
+          engine.runRenderLoop(function () {
+            scene.render();
+          });
+        };
+
+        assetsManager.load();
+
+        return scene;
+      };
+    </script> -->
+  </body>
 </html>
